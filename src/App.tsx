@@ -8,45 +8,28 @@ interface ITask {
 interface IList {
   _id: string;
   title: string;
-  tasks: ITask[];
+  tasks: string[];
 }
+
+const tasksMap: Record<ITask["_id"], ITask> = {
+  task1: { _id: "task1", title: "Task 1" },
+  task2: { _id: "task2", title: "Task 2" },
+  task3: { _id: "task3", title: "Task 3" },
+  task4: { _id: "task4", title: "Task 4" },
+  task5: { _id: "task5", title: "Task 5" },
+  task6: { _id: "task6", title: "Task 6" },
+};
 
 const data: Record<IList["_id"], IList> = {
   list1: {
     _id: "list1",
     title: "List 1",
-    tasks: [
-      {
-        _id: "task1",
-        title: "Task 1",
-      },
-      {
-        _id: "task2",
-        title: "Task 2",
-      },
-    ],
+    tasks: ["task1", "task2"],
   },
   list2: {
     _id: "list2",
     title: "List 2",
-    tasks: [
-      {
-        _id: "task3",
-        title: "Task 3",
-      },
-      {
-        _id: "task4",
-        title: "Task 4",
-      },
-      {
-        _id: "task5",
-        title: "Task 5",
-      },
-      {
-        _id: "task6",
-        title: "Task 6",
-      },
-    ],
+    tasks: ["task3", "task4", "task5", "task6"],
   },
 };
 
@@ -87,8 +70,8 @@ function List(props: { list: IList }) {
         {props.list.title}
       </div>
       <div className="flex flex-col gap-2">
-        {props.list.tasks.map((task, idx) => (
-          <TaskCard key={task._id} task={task} position={idx} />
+        {props.list.tasks.map((taskId, idx) => (
+          <TaskCard key={taskId} task={tasksMap[taskId]} position={idx} />
         ))}
       </div>
     </section>
@@ -149,14 +132,3 @@ function TaskCard(props: { task: ITask; position: number }) {
 }
 
 export default App;
-
-function isOverlapping(el1: HTMLElement, el2: HTMLElement) {
-  const rect1 = el1.getBoundingClientRect();
-  const rect2 = el2.getBoundingClientRect();
-
-  const overlap =
-    (rect1.right > rect2.left || rect1.left < rect2.right) &&
-    rect1.top < rect2.bottom;
-
-  return overlap;
-}
